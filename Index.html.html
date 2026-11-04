@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pastel Quest: The Lost Time Crystal</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#F8C8DC; --lav:#D8C8F0; --blue:#C8E4F8; --mint:#CDEEDB; --cream:#FFF7E8; --purple:#B8A4E8;
+  --ink:#3b2f63; --ink2:#6a5c99; --good:#5fbf8f; --bad:#e8788f; --card:rgba(255,255,255,.88);
+  --shadow:0 10px 30px rgba(120,95,180,.22);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:'Nunito','Segoe UI',system-ui,-apple-system,sans-serif;color:var(--ink);
+  min-height:100vh;overflow-x:hidden;position:relative;transition:background 1s;
+  background:linear-gradient(160deg,var(--pink),var(--lav) 55%,var(--blue)); background-attachment:fixed;
+}
+body.t-1{background:linear-gradient(180deg,#ffd9e8 0%,#fbe5ef 45%,var(--mint) 100%);background-attachment:fixed}
+body.t-2{background:linear-gradient(180deg,#bfa8ea 0%,var(--lav) 50%,#e8def8 100%);background-attachment:fixed}
+body.t-3{background:linear-gradient(180deg,var(--blue) 0%,#e3eefb 50%,var(--pink) 100%);background-attachment:fixed}
+body::after{content:"";position:fixed;left:-10%;right:-10%;bottom:-120px;height:260px;border-radius:50% 50% 0 0;pointer-events:none;z-index:0;opacity:.7;background:rgba(255,255,255,.35)}
+body.t-1::after{background:radial-gradient(ellipse at 30% 0,#b8e6cc,#cdeedb 70%)}
+body.t-2::after{background:radial-gradient(ellipse at 60% 0,#9a85d6,#b8a4e8 70%)}
+body.t-3::after{background:radial-gradient(ellipse at 50% 0,#f8c8dc,#f3d6e8 70%)}
+#sparkles,#deco{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.spark{position:absolute;opacity:.0;animation:twinkle 4s infinite ease-in-out}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.9;transform:scale(1.1) rotate(25deg)}}
+.dec{position:absolute;animation:floaty 6s infinite ease-in-out;opacity:.85;filter:drop-shadow(0 4px 4px rgba(0,0,0,.08))}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+main{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:18px 14px 40px}
+.screen{display:none;animation:pop .45s ease}
+.screen.active{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+h1,h2,h3{font-family:'Baloo 2','Nunito',sans-serif;margin:0}
+.card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:22px;backdrop-filter:blur(6px);border:2px solid rgba(255,255,255,.8)}
+.center{text-align:center}
+.btn{
+  font-family:'Baloo 2','Nunito',sans-serif;font-weight:700;font-size:1.1rem;color:#fff;border:none;cursor:pointer;
+  padding:12px 26px;border-radius:999px;background:linear-gradient(135deg,#c39ae8,#8f7ae0);
+  box-shadow:0 6px 0 #7662c2,0 10px 18px rgba(118,98,194,.3);transition:transform .12s,box-shadow .12s,filter .2s;margin:6px;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #7662c2}
+.btn.pink{background:linear-gradient(135deg,#f7a8c8,#ee86b3);box-shadow:0 6px 0 #cf6a98,0 10px 18px rgba(207,106,152,.3)}
+.btn.mint{background:linear-gradient(135deg,#8fdcb4,#5fbf8f);box-shadow:0 6px 0 #45a075,0 10px 18px rgba(69,160,117,.3)}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:0 5px 0 #d7ccf0,0 8px 14px rgba(120,95,180,.15)}
+.btn.small{font-size:.95rem;padding:8px 16px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;filter:grayscale(.4)}
+/* start */
+.title{font-size:clamp(2.1rem,7vw,3.6rem);line-height:1.05;color:#6b4fc7;text-shadow:0 3px 0 #fff,0 8px 18px rgba(120,95,180,.3)}
+.title small{display:block;font-size:.45em;color:#e0699b;letter-spacing:.14em;text-transform:uppercase}
+.story{max-width:560px;margin:10px auto;font-size:1.05rem;line-height:1.55;color:var(--ink2)}
+.crystal-wrap{display:flex;justify-content:center;margin:6px 0}
+.crystal{animation:float 3.2s infinite ease-in-out,glow 2.4s infinite alternate}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+@keyframes glow{from{filter:drop-shadow(0 0 8px #fff) drop-shadow(0 0 16px #d8c8f0)}to{filter:drop-shadow(0 0 16px #fff) drop-shadow(0 0 30px #f8c8dc)}}
+/* how/review */
+.list{text-align:left;line-height:1.6;font-size:1.02rem}
+.list li{margin:6px 0}
+.rev{display:grid;gap:12px;margin-top:12px;text-align:left}
+.rev .box{background:#fff;border-radius:18px;padding:14px 16px;border-left:8px solid var(--purple);box-shadow:0 4px 12px rgba(120,95,180,.12)}
+.rev .box:nth-child(3n+1){border-color:#f08fb5}.rev .box:nth-child(3n+2){border-color:#7fd3a8}
+.rev h3{font-size:1.2rem;color:#6b4fc7;margin-bottom:4px}
+.rev p{margin:4px 0;line-height:1.5}
+.ex{display:inline-block;background:var(--cream);border-radius:10px;padding:3px 10px;margin:2px 4px 2px 0;font-weight:800}
+.hl{color:#d1558a;font-weight:800}
+/* map */
+.shards{display:flex;gap:14px;justify-content:center;margin:10px 0}
+.slot{width:62px;height:76px;border-radius:18px;background:rgba(255,255,255,.6);border:3px dashed var(--purple);display:flex;align-items:center;justify-content:center}
+.slot.got{border-style:solid;background:#fff;animation:glow 2s infinite alternate}
+.slot svg{opacity:.2}.slot.got svg{opacity:1}
+.mapnodes{display:flex;flex-direction:column;gap:16px;margin-top:10px}
+.node{display:flex;align-items:center;gap:16px;text-align:left;padding:16px;border-radius:24px;border:3px solid #fff;cursor:pointer;
+  transition:transform .15s;box-shadow:var(--shadow);font-family:inherit;width:100%;color:var(--ink)}
+.node:hover:not(.locked){transform:translateY(-4px) scale(1.01)}
+.node .ic{font-size:2.6rem;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;flex:none}
+.node h3{font-size:1.35rem}.node p{margin:2px 0 0;font-size:.95rem;color:var(--ink2)}
+.node.n1{background:linear-gradient(135deg,#ffd3e5,#d5f4e2)}
+.node.n2{background:linear-gradient(135deg,#cdb9f0,#e6dcf8)}
+.node.n3{background:linear-gradient(135deg,#bfe0f8,#f9d0e2)}
+.node.locked{filter:grayscale(.9);opacity:.6;cursor:not-allowed}
+.node .st{margin-left:auto;font-size:1.8rem}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:800;background:#fff;margin-left:6px}
+/* game */
+.hud{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.hud .lv{font-family:'Baloo 2';font-weight:800;font-size:1.15rem;text-align:center;color:#6b4fc7}
+.pill{background:#fff;border-radius:999px;padding:6px 14px;font-weight:800;box-shadow:0 3px 8px rgba(120,95,180,.15);white-space:nowrap}
+.hearts{letter-spacing:2px;font-size:1.2rem}
+.stats{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:12px 0 6px;font-weight:800;font-size:.95rem}
+.bar{height:16px;background:rgba(255,255,255,.8);border-radius:999px;overflow:hidden;border:2px solid #fff;box-shadow:inset 0 2px 4px rgba(0,0,0,.08)}
+.bar>i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#f7a8c8,#b8a4e8,#8fdcb4);transition:width .5s}
+.timerRow{display:none;align-items:center;gap:10px;margin:10px 0 0}
+.timerRow.on{display:flex}
+.timerRow .bar{flex:1}
+.timerRow .bar>i{background:linear-gradient(90deg,#8fdcb4,#ffd66b);transition:width 1s linear}
+.timerRow.low .bar>i{background:linear-gradient(90deg,#ffb0a8,#e8788f)}
+.timerNum{font-family:'Baloo 2';font-weight:800;font-size:1.5rem;min-width:62px;text-align:center;background:#fff;border-radius:14px;padding:0 8px}
+.timerRow.low .timerNum{color:#d1405f;animation:shake .4s infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+.qcard{margin-top:12px}
+.scene{font-size:clamp(2.4rem,9vw,3.6rem);text-align:center;margin-bottom:4px;animation:float 3.5s infinite ease-in-out}
+.qtype{display:inline-block;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--lav);color:#5b46b0;padding:3px 12px;border-radius:999px}
+.qtext{font-size:clamp(1.15rem,3.8vw,1.5rem);font-weight:800;line-height:1.4;margin:10px 0 14px;white-space:pre-line}
+.blank{display:inline-block;min-width:70px;border-bottom:4px solid #b8a4e8;color:transparent;margin:0 2px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;font-family:inherit;font-weight:800;font-size:1.05rem;color:var(--ink);background:#fff;border:3px solid var(--lav);
+  border-radius:18px;padding:12px 14px;cursor:pointer;transition:transform .12s,border-color .2s,background .2s;box-shadow:0 4px 0 #e4d9f6}
+.opt:hover:not(:disabled){transform:translateY(-2px);border-color:var(--purple);background:#faf7ff}
+.opt .lt{flex:none;width:34px;height:34px;border-radius:50%;background:var(--lav);display:flex;align-items:center;justify-content:center;font-family:'Baloo 2';color:#5b46b0}
+.opt.right{background:#dff6e9;border-color:var(--good);animation:bounce .5s}
+.opt.wrong{background:#fde3ea;border-color:var(--bad);animation:wiggle .4s}
+.opt.right .lt{background:var(--good);color:#fff}.opt.wrong .lt{background:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes wiggle{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.hintbox{display:none;margin-top:12px;background:#fff7d6;border:2px dashed #f0c85a;border-radius:16px;padding:10px 14px;font-weight:700}
+.hintbox.on{display:block;animation:pop .3s}
+.actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:10px}
+.feedback{display:none;margin-top:14px;border-radius:20px;padding:14px 16px;border:3px solid}
+.feedback.on{display:block;animation:pop .35s}
+.feedback.ok{background:#e3f8ec;border-color:var(--good)}
+.feedback.no{background:#fff0f4;border-color:var(--bad)}
+.feedback h3{font-size:1.5rem}.feedback.ok h3{color:#2e9566}.feedback.no h3{color:#d1405f}
+.feedback p{margin:4px 0;line-height:1.5}
+/* order / match */
+.bank,.ans{display:flex;flex-wrap:wrap;gap:8px;min-height:56px;padding:10px;border-radius:18px}
+.ans{background:#f4eefc;border:3px dashed var(--purple);margin-bottom:12px;align-items:center}
+.bank{background:rgba(255,255,255,.5)}
+.tok{font-family:inherit;font-weight:800;font-size:1.05rem;padding:8px 14px;border-radius:14px;border:3px solid var(--purple);background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 3px 0 #d6c8f3;transition:transform .12s}
+.tok:hover:not(:disabled){transform:translateY(-2px)}
+.tok.sel{background:var(--pink);border-color:#ee86b3}
+.endp{font-weight:800;font-size:1.4rem;color:#6b4fc7;padding:0 4px}
+.ph{color:#9a8bc8;font-weight:700}
+.mrow{display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}
+.who{flex:1 1 140px;font-weight:800;background:#fff;border-radius:14px;padding:10px 14px;border:3px solid var(--mint)}
+.mslot{flex:1 1 140px;min-height:48px;font-family:inherit;font-weight:800;font-size:1rem;border-radius:14px;border:3px dashed var(--purple);background:#f4eefc;color:var(--ink);cursor:pointer}
+.mslot.filled{border-style:solid;background:#fff}
+.mslot.right{background:#dff6e9;border-color:var(--good)}.mslot.wrong{background:#fde3ea;border-color:var(--bad)}
+/* result */
+.big{font-size:4rem}
+.statrow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0}
+.stat{background:#fff;border-radius:20px;padding:12px 20px;min-width:130px;box-shadow:0 4px 12px rgba(120,95,180,.15)}
+.stat b{display:block;font-family:'Baloo 2';font-size:2rem;color:#6b4fc7;line-height:1.1}
+.award{display:inline-block;margin:8px;padding:10px 26px;border-radius:999px;font-family:'Baloo 2';font-weight:800;font-size:1.5rem;color:#fff;background:linear-gradient(135deg,#f7a8c8,#b8a4e8,#7fd3e8);box-shadow:0 6px 18px rgba(184,164,232,.6);animation:glow 2s infinite alternate}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(80,60,130,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.hidden{display:none}
+.modal .card{max-width:440px;width:100%;animation:pop .35s}
+#soundBtn{position:fixed;top:10px;right:10px;z-index:20;width:44px;height:44px;border-radius:50%;border:3px solid #fff;background:var(--lav);font-size:1.3rem;cursor:pointer;box-shadow:var(--shadow)}
+.pt{position:fixed;z-index:60;pointer-events:none;font-size:1.4rem;animation:burst 1s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(.4);opacity:0}}
+@media(max-width:520px){
+  .hud{grid-template-columns:1fr 1fr}.hud .lv{grid-column:1/-1;order:-1}
+  .node{padding:12px;gap:10px}.node .ic{width:54px;height:54px;font-size:2rem}
+  main{padding-top:50px}
+}
+</style>
+</head>
+<body class="t-start">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#d8c8f0"/><stop offset=".7" stop-color="#f8c8dc"/><stop offset="1" stop-color="#c8e4f8"/></linearGradient>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#f58bb5"/></linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#9b82e0"/></linearGradient>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#7cc4ee"/></linearGradient>
+  </defs>
+</svg>
+
+<div id="sparkles"></div>
+<div id="deco"></div>
+<button id="soundBtn" title="Sound on/off" aria-label="Toggle sound">🔊</button>
+
+<main>
+  <!-- START -->
+  <section id="screen-start" class="screen active">
+    <div class="card center">
+      <h1 class="title"><small>✨ English Grammar Adventure ✨</small>Pastel Quest<br>The Lost Time Crystal</h1>
+      <div class="crystal-wrap" id="startCrystal"></div>
+      <p class="story">Welcome to <b>Pastelia</b>, a magical pastel world! The Time Crystal has been stolen, and now nobody can understand what others are doing. Travel through three magical worlds, solve Present Continuous puzzles, and bring back all three Crystal Shards!</p>
+      <button class="btn pink" id="btnStart">▶ Start Game</button>
+      <button class="btn ghost" id="btnHow">❓ How to Play</button>
+      <button class="btn ghost" id="btnRevStart">📖 Grammar Review</button>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="screen-how" class="screen">
+    <div class="card">
+      <h2 class="center">❓ How to Play</h2>
+      <ul class="list">
+        <li>🗺️ There are <b>3 levels</b>. Finish one level to unlock the next.</li>
+        <li>❓ Each level has <b>10 questions</b>. Choose or build the correct answer.</li>
+        <li>⭐ Correct answer = <b>+10 points</b>. Maximum score = 300.</li>
+        <li>❤️ You have <b>3 hearts</b> in each level. A wrong answer loses 1 heart.</li>
+        <li>💡 Press <b>Hint</b> if you need a clue. Hints never show the answer.</li>
+        <li>⏱️ In <b>Level 3</b>, you have <b>20 seconds</b> for each question.</li>
+        <li>💎 Win each level to get a <b>Crystal Shard</b>. Collect all 3 to save Pastelia!</li>
+      </ul>
+      <div class="center"><button class="btn" data-back>⬅ Back</button></div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section id="screen-map" class="screen">
+    <div class="card center">
+      <h2>🗺️ Map of Pastelia</h2>
+      <p style="margin:4px 0;color:var(--ink2)">Collect the 3 Crystal Shards!</p>
+      <div class="shards" id="shardBar"></div>
+      <div class="mapnodes" id="mapNodes"></div>
+      <div style="margin-top:14px">
+        <button class="btn ghost small" id="btnRevMap">📖 Grammar Review</button>
+        <button class="btn ghost small" id="btnHome">🏠 Home</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section id="screen-game" class="screen">
+    <div class="card" style="padding:14px 18px">
+      <div class="hud">
+        <button class="btn ghost small" id="btnToMap" style="margin:0">🗺️ Map</button>
+        <div class="lv" id="lvTitle"></div>
+        <div class="pill hearts" id="hearts"></div>
+      </div>
+      <div class="stats">
+        <span class="pill">⭐ Score: <span id="hScore">0</span></span>
+        <span class="pill">Question <span id="hQ">1</span>/10</span>
+        <span class="pill">✅ Correct: <span id="hCorrect">0</span></span>
+      </div>
+      <div class="bar"><i id="prog"></i></div>
+      <div class="timerRow" id="timerRow"><span>⏱️</span><div class="bar"><i id="timerFill" style="width:100%"></i></div><span class="timerNum" id="timerNum">20</span></div>
+    </div>
+
+    <div class="card qcard">
+      <div class="scene" id="scene"></div>
+      <span class="qtype" id="qtype"></span>
+      <div class="qtext" id="qtext"></div>
+      <div id="qbody"></div>
+      <div class="hintbox" id="hintbox"></div>
+      <div class="actions">
+        <button class="btn mint small" id="btnHint">💡 Hint</button>
+        <button class="btn small" id="btnCheck" style="display:none">✔ Check Answer</button>
+      </div>
+      <div class="feedback" id="feedback"><h3 id="fbTitle"></h3><p id="fbText"></p><p id="fbAns"></p>
+        <div class="center"><button class="btn pink" id="btnNext">Next ➜</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="screen-result" class="screen">
+    <div class="card center">
+      <div class="big">🎉</div>
+      <h2 id="resTitle">Level Complete!</h2>
+      <div class="crystal-wrap" id="resShard"></div>
+      <p id="resShardText" style="font-weight:800;font-size:1.15rem"></p>
+      <div class="statrow">
+        <div class="stat"><b id="resScore">0</b>Score (out of 100)</div>
+        <div class="stat"><b id="resCorrect">0</b>Correct (out of 10)</div>
+      </div>
+      <button class="btn pink" id="btnContinue">Continue ➜</button>
+      <button class="btn ghost" id="btnResMap">🗺️ Level Map</button>
+    </div>
+  </section>
+
+  <!-- VICTORY -->
+  <section id="screen-victory" class="screen">
+    <div class="card center">
+      <h1 class="title" style="font-size:clamp(2rem,7vw,3.2rem)">🎊 You Saved Pastelia! 🎊</h1>
+      <p class="story">The three shards shine together and the Time Crystal is whole again. The people of Pastelia can see what everybody is doing right now. Thank you, hero!</p>
+      <div class="crystal-wrap" id="victoryCrystal"></div>
+      <div class="statrow">
+        <div class="stat"><b id="vScore">0</b>Total score (out of 300)</div>
+        <div class="stat"><b id="vCorrect">0</b>Correct (out of 30)</div>
+      </div>
+      <div class="award">🏆 Time Guardian</div>
+      <div>
+        <button class="btn pink" id="btnAgain">🔄 Play Again</button>
+        <button class="btn ghost" id="btnRevVic">📖 Review Grammar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEW -->
+  <section id="screen-review" class="screen">
+    <div class="card">
+      <h2 class="center">📖 Grammar Review: Present Continuous</h2>
+      <div class="rev">
+        <div class="box"><h3>1. What is Present Continuous?</h3>
+          <p>We use it for actions that are happening <span class="hl">right now</span> (at the moment of speaking).</p>
+          <p><span class="ex">Look! The cat is sleeping.</span><span class="ex">I am reading now.</span></p>
+          <p>Time words: <b>now, right now, at the moment, today, Look!, Listen!</b></p></div>
+        <div class="box"><h3>2. How to use am, is, and are</h3>
+          <p><span class="hl">I</span> → <b>am</b> &nbsp;|&nbsp; <span class="hl">He, She, It</span> and one person/thing → <b>is</b> &nbsp;|&nbsp; <span class="hl">You, We, They</span> and many people/things → <b>are</b></p>
+          <p><span class="ex">I am dancing.</span><span class="ex">The dog is running.</span><span class="ex">The children are playing.</span></p></div>
+        <div class="box"><h3>3. Positive sentences</h3>
+          <p><b>Subject + am/is/are + verb-ing</b></p>
+          <p><span class="ex">She is dancing.</span><span class="ex">They are playing.</span></p></div>
+        <div class="box"><h3>4. Negative sentences</h3>
+          <p><b>Subject + am/is/are + not + verb-ing</b></p>
+          <p><span class="ex">The rabbit is not sleeping.</span><span class="ex">They are not playing.</span></p>
+          <p>Short forms: is not = <b>isn't</b>, are not = <b>aren't</b>.</p></div>
+        <div class="box"><h3>5. Questions</h3>
+          <p><b>Am/Is/Are + subject + verb-ing?</b></p>
+          <p><span class="ex">Is the cat running?</span><span class="ex">Are the children dancing?</span></p>
+          <p>Short answers: <b>Yes, it is. / No, they aren't.</b></p></div>
+        <div class="box"><h3>6. Spelling rules for -ing</h3>
+          <p>Most verbs: add <b>-ing</b> → play<b>ing</b>, read<b>ing</b></p>
+          <p>Verb ends in <b>e</b>: drop the e → writ<b>ing</b>, danc<b>ing</b>, mak<b>ing</b></p>
+          <p>Short verb with 1 vowel + 1 consonant: double the last letter → ru<b>nn</b>ing, swi<b>mm</b>ing, si<b>tt</b>ing</p></div>
+        <div class="box"><h3>7. Present Simple vs. Present Continuous</h3>
+          <p><b>Present Simple</b> = habits and routines (<i>every day, usually, always</i>): <span class="ex">I walk to school every day.</span></p>
+          <p><b>Present Continuous</b> = happening now (<i>now, Look!, Listen!</i>): <span class="ex">I am walking in the park now.</span></p></div>
+      </div>
+      <div class="center"><button class="btn" data-back>⬅ Back</button></div>
+    </div>
+  </section>
+</main>
+
+<!-- GAME OVER MODAL -->
+<div class="modal hidden" id="modal">
+  <div class="card center">
+    <div class="big">💔</div>
+    <h2>Oh no! No hearts left.</h2>
+    <p style="line-height:1.5">Don't worry! Every hero learns by trying again. Your other levels are safe.</p>
+    <button class="btn pink" id="btnRetry">🔁 Retry This Level</button>
+    <button class="btn ghost" id="btnModalMap">🗺️ Back to Map</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ===================== DATA: 30 QUESTIONS ===================== */
+const LEVELS = [
+  { name:"Level 1: The Candy Meadow", short:"The Candy Meadow", icon:"🍭", theme:"t-1", diff:"Easy", desc:"Positive sentences with am / is / are + verb-ing", shard:"g1",
+    qs:[
+      {type:"mc", label:"What is she doing?", scene:"👧📖", q:"What is the girl doing?",
+        opts:["She is reading a book.","She reads a book.","She are reading a book."], a:0,
+        hint:"Remember: use 'is' with she, he, and it. Then add verb + -ing.",
+        exp:"The action is happening now, so we use is + reading. 'She' goes with 'is'."},
+      {type:"mc", label:"Choose the correct sentence", scene:"⚽🧒🧒", q:"Choose the correct sentence.",
+        opts:["They is playing football.","They are playing football.","They playing football."], a:1,
+        hint:"'They' means more than one person. Which helping verb goes with plural subjects?",
+        exp:"We use are with they. The correct form is: They are playing football."},
+      {type:"mc", label:"Fill in the blank", scene:"🍎😋", q:"I ___ eating an apple now.",
+        opts:["am","is","are"], a:0,
+        hint:"The subject is 'I'. It has its own special helping verb.",
+        exp:"We always use am with I: I am eating an apple."},
+      {type:"match", label:"Match the characters", scene:"🌈", q:"Match each character with its action.",
+        items:[{who:"🐰 The rabbit", act:"is jumping"},{who:"🐦 The bird", act:"is singing"},{who:"🐟 The fish", act:"is swimming"}],
+        hint:"Think about what each animal can do. Rabbits hop, birds make music, and fish live in water.",
+        exp:"The rabbit is jumping, the bird is singing, and the fish is swimming. All use is + verb-ing."},
+      {type:"mc", label:"What is she doing?", scene:"💃✨", q:"What is she doing?",
+        opts:["She is dance.","She is dancing.","She dancing."], a:1,
+        hint:"Present Continuous needs two parts: is + a verb that ends in -ing.",
+        exp:"We write is + dancing. For dance, we drop the e and add -ing."},
+      {type:"mc", label:"Fill in the blank", scene:"🎨🖌️", q:"We ___ painting a picture.",
+        opts:["is","am","are"], a:2,
+        hint:"Remember: we use 'are' with we, you, and they.",
+        exp:"We use are with we: We are painting a picture."},
+      {type:"mc", label:"Happening right now", scene:"⏰", q:"Which sentence shows an action happening right now?",
+        opts:["I walk to school every day.","I am walking in the meadow now.","I walked yesterday."], a:1,
+        hint:"Look for the helping verb (am/is/are) and a word like 'now'.",
+        exp:"'I am walking ... now' is Present Continuous. It shows an action happening at this moment."},
+      {type:"mc", label:"Choose the correct answer", scene:"🐶🏃", q:"The dog ___ in the meadow.",
+        opts:["is running","are running","running"], a:0,
+        hint:"'The dog' is one animal. Do not forget the helping verb!",
+        exp:"One dog = is. We need is + running."},
+      {type:"mc", label:"Choose the correct answer", scene:"🥤🧒👧", q:"Tom and Mia ___ drinking juice.",
+        opts:["is drinking","are drinking","am drinking"], a:1,
+        hint:"Tom and Mia = two people. Think of 'they'.",
+        exp:"Tom and Mia means 'they', so we use are: Tom and Mia are drinking juice."},
+      {type:"mc", label:"Verb-ing form", scene:"🎤", q:"Which word is the -ing form of 'sing'?",
+        opts:["sings","sang","singing"], a:2,
+        hint:"The -ing form ends with the letters i-n-g.",
+        exp:"The -ing form of sing is singing. We use it after am, is, or are."}
+    ]},
+  { name:"Level 2: The Mystery Forest", short:"The Mystery Forest", icon:"🌲", theme:"t-2", diff:"Medium", desc:"Negative sentences, questions, and short dialogues", shard:"g2",
+    qs:[
+      {type:"mc", label:"Fill in the blank", scene:"🐰🥕", q:"The rabbit ___ sleeping. It is eating carrots.",
+        opts:["is not","are not","am not"], a:0,
+        hint:"One rabbit. Put 'not' after the helping verb.",
+        exp:"We make a negative with am/is/are + not. One rabbit = is not sleeping."},
+      {type:"mc", label:"Choose the negative sentence", scene:"🦊🦊", q:"Choose the correct negative sentence.",
+        opts:["They not are playing.","They are not playing.","They do not playing."], a:1,
+        hint:"'Not' comes after am/is/are, before the -ing verb.",
+        exp:"The pattern is subject + are + not + verb-ing: They are not playing."},
+      {type:"mc", label:"Choose the question", scene:"🐇🐇", q:"Choose the correct question.",
+        opts:["Is the rabbits jumping?","Are the rabbits jumping?","The rabbits are jumping?"], a:1,
+        hint:"For a question, the helping verb goes first. 'Rabbits' is plural.",
+        exp:"Question pattern: Are + subject + verb-ing? Plural rabbits = Are the rabbits jumping?"},
+      {type:"order", label:"Arrange the words", scene:"🐱💨", q:"Arrange the words to make a question.",
+        words:["the","running","Is","cat"], answer:"Is the cat running", end:"?",
+        hint:"A question starts with am/is/are. The question word is a capital letter word.",
+        exp:"Am/Is/Are + subject + verb-ing? → Is the cat running?"},
+      {type:"mc", label:"Complete the dialogue", scene:"📺", q:"A: Are you watching TV?\nB: No, I ___. I am reading a book.",
+        opts:["is not","am not","are not"], a:1,
+        hint:"B is talking about himself or herself: 'I'.",
+        exp:"We use am not with I: No, I am not."},
+      {type:"mc", label:"Fill in the blank", scene:"🛒🏪", q:"My parents ___ cooking dinner. They are at the market.",
+        opts:["is not","am not","are not"], a:2,
+        hint:"'My parents' is plural. It means 'they'.",
+        exp:"Plural subject = are not: My parents are not cooking dinner."},
+      {type:"mc", label:"Fill in the blank", scene:"👧👦💃", q:"___ the children dancing in the forest?",
+        opts:["Is","Are","Am"], a:1,
+        hint:"'The children' means more than one child.",
+        exp:"We start the question with Are because children is plural: Are the children dancing?"},
+      {type:"order", label:"Arrange the words", scene:"🐒🌴", q:"Arrange the words to make a negative sentence.",
+        words:["climbing","are","The","not","monkeys"], answer:"The monkeys are not climbing", end:".",
+        hint:"Subject first, then are, then 'not', and then the -ing verb.",
+        exp:"Subject + are + not + verb-ing → The monkeys are not climbing."},
+      {type:"mc", label:"Complete the dialogue", scene:"🐦🎶", q:"A: Is the bird singing?\nB: Yes, it ___.",
+        opts:["does","are","is"], a:2,
+        hint:"A short answer repeats the helping verb from the question.",
+        exp:"The question starts with Is, so the short answer is: Yes, it is."},
+      {type:"mc", label:"Complete the dialogue", scene:"🧚‍♀️✨", q:"A: Are the fairies hiding?\nB: No, they ___.",
+        opts:["isn't","don't","aren't"], a:2,
+        hint:"The question uses 'Are', so the short answer uses the same verb with 'not'.",
+        exp:"Are the fairies hiding? → No, they aren't. (aren't = are not)"}
+    ]},
+  { name:"Level 3: The Crystal Castle", short:"The Crystal Castle", icon:"🏰", theme:"t-3", diff:"Hard", desc:"Mixed grammar, spelling, and error correction. Timed: 20 seconds!", shard:"g3",
+    qs:[
+      {type:"mc", label:"Look for clues", scene:"🌳🧒🧒", q:"Look! The children ___ in the garden.",
+        opts:["play","is playing","are playing"], a:2,
+        hint:"'Look!' tells you it is happening now. 'Children' is plural.",
+        exp:"'Look!' = now, so we use Present Continuous. Plural subject = are playing."},
+      {type:"mc", label:"Choose the correct sentence", scene:"🍳👩", q:"Choose the grammatically correct sentence.",
+        opts:["She is cook dinner now.","She cooking dinner now.","She is cooking dinner now."], a:2,
+        hint:"Check for BOTH parts: the helping verb AND the -ing verb.",
+        exp:"We need is + cooking. The other sentences are missing 'is' or '-ing'."},
+      {type:"mc", label:"Simple or continuous?", scene:"🎒🏫", q:"Tom ___ to school every day.",
+        opts:["is going","goes","go"], a:1,
+        hint:"'Every day' shows a habit or routine, not an action right now.",
+        exp:"Habits use Present Simple. With Tom (he), add -es: Tom goes to school every day."},
+      {type:"mc", label:"Spelling rule", scene:"🏃‍♂️💨", q:"Choose the correct -ing form of 'run'.",
+        opts:["runing","running","runeing"], a:1,
+        hint:"Run ends with one vowel + one consonant. What do we do to the last letter?",
+        exp:"We double the last letter: run → running."},
+      {type:"mc", label:"Spelling rule", scene:"✉️✍️", q:"She is ___ a letter.",
+        opts:["writting","writeing","writing"], a:2,
+        hint:"Write ends with the letter e. What happens to the e?",
+        exp:"We drop the e and add -ing: write → writing."},
+      {type:"mc", label:"Find the mistake", scene:"🔍📺", q:"Find the mistake in this sentence:\n\"My brother are watching TV now.\"",
+        opts:["Change 'are' to 'is'","Change 'watching' to 'watch'","Change 'now' to 'every day'"], a:0,
+        hint:"'My brother' is one person. Which helping verb is wrong?",
+        exp:"One person (he) needs is: My brother is watching TV now."},
+      {type:"mc", label:"Look for clues", scene:"🚪👂", q:"Listen! Somebody ___ at the door.",
+        opts:["knocks","knocking","is knocking"], a:2,
+        hint:"'Listen!' means it is happening right now. Do not forget the helping verb.",
+        exp:"'Listen!' = now. Somebody is singular, so we use is knocking."},
+      {type:"mc", label:"Simple and continuous", scene:"☕🍵", q:"My mom usually ___ coffee in the morning, but today she ___ tea.",
+        opts:["drinks / is drinking","is drinking / drinks","drink / drinking"], a:0,
+        hint:"'Usually' = habit. 'Today' = this moment, an action happening now.",
+        exp:"Usually → Present Simple (drinks). Today → Present Continuous (is drinking)."},
+      {type:"mc", label:"Use the situation", scene:"🍳👨🏠", q:"Dad is in the kitchen now. He ___ lunch for us.",
+        opts:["makes","is making","are making"], a:1,
+        hint:"The word 'now' tells you the action is happening at this moment.",
+        exp:"'Now' = Present Continuous. He is making lunch for us."},
+      {type:"mc", label:"Choose the correct sentence", scene:"🏊‍♀️💦", q:"Choose the correct sentence.",
+        opts:["The girls are swiming now.","The girls are swimming now.","The girls is swimming now."], a:1,
+        hint:"Swim ends with one vowel + one consonant. Also check are/is.",
+        exp:"We double the m: swimming. 'The girls' is plural, so we use are."}
+    ]}
+];
+
+/* ===================== STATE ===================== */
+const $ = id => document.getElementById(id);
+const S = {
+  levelDone:[false,false,false], levelScore:[0,0,0], levelCorrect:[0,0,0],
+  cur:0, qi:0, hearts:3, score:0, correct:0, answered:false,
+  timerId:null, timeLeft:20, sound:true, prev:"start", screen:"start",
+  order:null, match:null
+};
+const TIME_LIMIT = 20;
+
+/* ===================== UTILITIES ===================== */
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function crystalSVG(w, kind){
+  const fill = kind==="full" ? "url(#gC)" : "url(#"+kind+")";
+  if(kind==="full"){
+    return `<svg class="crystal" width="${w}" height="${w*1.3}" viewBox="0 0 100 130">
+      <polygon points="50,2 92,38 76,114 50,128 24,114 8,38" fill="${fill}" stroke="#a48be0" stroke-width="2.5" stroke-linejoin="round"/>
+      <polyline points="8,38 50,52 92,38 M50,52 50,128 M50,52 24,114 M50,52 76,114 M50,2 50,52" fill="none" stroke="#fff" stroke-width="2" opacity=".85"/>
+      <circle cx="38" cy="26" r="4" fill="#fff"/><circle cx="62" cy="70" r="3" fill="#fff"/></svg>`;
+  }
+  return `<svg class="crystal" width="${w}" height="${w*1.25}" viewBox="0 0 100 125">
+      <polygon points="50,4 88,60 50,121 12,60" fill="${fill}" stroke="#a48be0" stroke-width="3" stroke-linejoin="round"/>
+      <polyline points="12,60 50,70 88,60 M50,4 50,121 M50,70 50,121" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>
+      <circle cx="40" cy="30" r="4" fill="#fff"/></svg>`;
+}
+let audioCtx=null;
+function tone(notes){
+  if(!S.sound) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended") audioCtx.resume();
+    let t = audioCtx.currentTime;
+    notes.forEach(([f,d,type])=>{
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+      o.type=type||"sine"; o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.12,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+      o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+d+0.02); t+=d*0.8;
+    });
+  }catch(e){}
+}
+const sndOk   = ()=>tone([[660,.12],[880,.12],[1175,.22]]);
+const sndNo   = ()=>tone([[330,.18,"triangle"],[262,.28,"triangle"]]);
+const sndWin  = ()=>tone([[523,.14],[659,.14],[784,.14],[1047,.4]]);
+function burst(x,y,emojis,count){
+  const list = emojis || ["⭐","✨","💖","💎"];
+  for(let i=0;i<(count||14);i++){
+    const p=document.createElement("div"); p.className="pt";
+    p.textContent=list[Math.floor(Math.random()*list.length)];
+    p.style.left=x+"px"; p.style.top=y+"px";
+    const ang=Math.random()*Math.PI*2, dist=60+Math.random()*120;
+    p.style.setProperty("--dx",Math.cos(ang)*dist+"px");
+    p.style.setProperty("--dy",Math.sin(ang)*dist-40+"px");
+    p.style.setProperty("--r",(Math.random()*360-180)+"deg");
+    document.body.appendChild(p); setTimeout(()=>p.remove(),1000);
+  }
+}
+function burstCenter(n){ burst(window.innerWidth/2, window.innerHeight/3, null, n||30); }
+
+/* ===================== BACKGROUND DECOR ===================== */
+function buildSparkles(){
+  const box=$("sparkles"); const sy=["✨","⭐","💫","🌟"];
+  for(let i=0;i<22;i++){
+    const s=document.createElement("span"); s.className="spark"; s.textContent=sy[i%4];
+    s.style.left=(Math.random()*100)+"%"; s.style.top=(Math.random()*100)+"%";
+    s.style.fontSize=(12+Math.random()*16)+"px"; s.style.animationDelay=(Math.random()*4)+"s";
+    s.style.animationDuration=(3+Math.random()*3)+"s"; box.appendChild(s);
+  }
+}
+const DECOS = {
+  "t-start":["💎","🌸","☁️","🦄","🌈","✨","🎀","☁️"],
+  "t-1":["🍭","🍬","🌸","🧁","🌷","🍩","🦋","🍓"],
+  "t-2":["🌲","🍄","🦉","🔮","🌙","🦊","🌳","🕯️"],
+  "t-3":["🏰","💎","❄️","👑","🦢","💠","🕊️","⭐"]
+};
+function setTheme(t){
+  document.body.className=t;
+  const box=$("deco"); box.innerHTML="";
+  const list=DECOS[t];
+  for(let i=0;i<8;i++){
+    const d=document.createElement("span"); d.className="dec"; d.textContent=list[i];
+    d.style.left=(4+ (i*12.5)%92)+"%";
+    d.style.top=(i%2 ? 70+Math.random()*18 : 8+Math.random()*22)+"%";
+    d.style.fontSize=(28+Math.random()*26)+"px"; d.style.animationDelay=(Math.random()*4)+"s";
+    box.appendChild(d);
+  }
+}
+
+/* ===================== SCREENS ===================== */
+function showScreen(name){
+  if(name!=="game") stopTimer();
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $("screen-"+name).classList.add("active");
+  S.screen=name;
+  if(name==="game") setTheme(LEVELS[S.cur].theme);
+  else if(name==="result") setTheme(LEVELS[S.cur].theme);
+  else if(name==="start"||name==="how"||name==="map"||name==="victory"||name==="review") setTheme("t-start");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function openInfo(name){ S.prev=S.screen; showScreen(name); }
+function goBack(){ showScreen(S.prev && S.prev!=="review" && S.prev!=="how" ? S.prev : "start"); }
+
+/* ===================== MAP ===================== */
+function renderMap(){
+  const bar=$("shardBar"); bar.innerHTML="";
+  ["g1","g2","g3"].forEach((g,i)=>{
+    const d=document.createElement("div"); d.className="slot"+(S.levelDone[i]?" got":"");
+    d.innerHTML=crystalSVG(38,g).replace('class="crystal"',''); bar.appendChild(d);
+  });
+  const wrap=$("mapNodes"); wrap.innerHTML="";
+  LEVELS.forEach((L,i)=>{
+    const unlocked = i===0 || S.levelDone[i-1];
+    const b=document.createElement("button");
+    b.className="node n"+(i+1)+(unlocked?"":" locked");
+    const status = !unlocked ? "🔒" : (S.levelDone[i] ? "✅" : "▶️");
+    const sc = S.levelDone[i] ? ` <span class="badge">Best: ${S.levelScore[i]}/100</span>` : "";
+    b.innerHTML=`<div class="ic">${unlocked?L.icon:"🔒"}</div>
+      <div><h3>${L.name}</h3><p>${unlocked?L.desc:"Finish the previous level to unlock!"}</p>
+      <span class="badge">${L.diff}</span>${sc}</div><div class="st">${status}</div>`;
+    b.disabled=!unlocked;
+    if(unlocked) b.addEventListener("click",()=>startLevel(i));
+    wrap.appendChild(b);
+  });
+}
+function goMap(){ stopTimer(); $("modal").classList.add("hidden"); renderMap(); showScreen("map"); }
+
+/* ===================== LEVEL FLOW ===================== */
+function startLevel(i){
+  stopTimer(); $("modal").classList.add("hidden");
+  S.cur=i; S.qi=0; S.hearts=3; S.score=0; S.correct=0; S.answered=false;
+  showScreen("game"); renderQuestion();
+}
+function updateHUD(){
+  const L=LEVELS[S.cur];
+  $("lvTitle").textContent=L.icon+" "+L.name;
+  $("hScore").textContent=S.score; $("hCorrect").textContent=S.correct;
+  $("hQ").textContent=Math.min(S.qi+1,10);
+  $("hearts").textContent="❤️".repeat(S.hearts)+"🤍".repeat(3-S.hearts);
+  $("prog").style.width=((S.qi + (S.answered?1:0))/10*100)+"%";
+}
+function renderQuestion(){
+  stopTimer();
+  const q=LEVELS[S.cur].qs[S.qi];
+  S.answered=false; S.order=null; S.match=null;
+  $("scene").textContent=q.scene||"";
+  $("qtype").textContent=q.label;
+  $("qtext").innerHTML=q.q.replace(/___/g,'<span class="blank">_____</span>');
+  $("hintbox").className="hintbox"; $("hintbox").textContent="";
+  $("feedback").className="feedback";
+  $("btnHint").style.display=""; $("btnHint").disabled=false;
+  $("btnCheck").style.display="none"; $("btnCheck").disabled=true;
+  const body=$("qbody"); body.innerHTML="";
+  if(q.type==="mc") buildMC(q,body);
+  else if(q.type==="order") buildOrder(q,body);
+  else if(q.type==="match") buildMatch(q,body);
+  updateHUD();
+  const tr=$("timerRow");
+  if(S.cur===2){ tr.classList.add("on"); startTimer(); } else { tr.classList.remove("on","low"); }
+}
+
+/* ---------- multiple choice ---------- */
+function buildMC(q,body){
+  const correctText=q.opts[q.a];
+  const opts=shuffle(q.opts);
+  const box=document.createElement("div"); box.className="opts"; box.id="optBox";
+  opts.forEach((t,i)=>{
+    const b=document.createElement("button"); b.className="opt";
+    b.innerHTML=`<span class="lt">${"ABC"[i]}</span><span></span>`; b.lastChild.textContent=t;
+    b.dataset.val=t;
+    b.addEventListener("click",()=>{
+      if(S.answered) return;
+      const ok = t===correctText;
+      box.querySelectorAll(".opt").forEach(x=>{
+        x.disabled=true;
+        if(x.dataset.val===correctText) x.classList.add("right");
+      });
+      if(!ok) b.classList.add("wrong");
+      finishQuestion(ok,false,b);
+    });
+    box.appendChild(b);
+  });
+  body.appendChild(box);
+}
+
+/* ---------- sentence ordering ---------- */
+function buildOrder(q,body){
+  S.order={bank:shuffle(q.words.map((w,i)=>({id:i,w}))), ans:[]};
+  // avoid already-correct starting order
+  body.innerHTML=`<div class="ans" id="ordAns"></div><div class="bank" id="ordBank"></div>`;
+  renderOrder(q);
+}
+function renderOrder(q){
+  const a=$("ordAns"), b=$("ordBank"); a.innerHTML=""; b.innerHTML="";
+  if(!S.order.ans.length){ const p=document.createElement("span"); p.className="ph"; p.textContent="Tap the words to build your sentence…"; a.appendChild(p); }
+  S.order.ans.forEach(t=>a.appendChild(makeTok(t,()=>{ if(S.answered)return; S.order.ans=S.order.ans.filter(x=>x.id!==t.id); S.order.bank.push(t); renderOrder(q); })));
+  if(S.order.ans.length){ const e=document.createElement("span"); e.className="endp"; e.textContent=LEVELS[S.cur].qs[S.qi].end; a.appendChild(e); }
+  S.order.bank.forEach(t=>b.appendChild(makeTok(t,()=>{ if(S.answered)return; S.order.bank=S.order.bank.filter(x=>x.id!==t.id); S.order.ans.push(t); renderOrder(q); })));
+  $("btnCheck").style.display=""; $("btnCheck").disabled = S.order.bank.length>0 || S.answered;
+}
+function makeTok(t,fn){ const b=document.createElement("button"); b.className="tok"; b.textContent=t.w; b.addEventListener("click",fn); if(S.answered) b.disabled=true; return b; }
+
+/* ---------- matching ---------- */
+function buildMatch(q,body){
+  S.match={assign:q.items.map(()=>null), sel:null, chips:shuffle(q.items.map((it,i)=>i))};
+  body.innerHTML=`<div id="mRows"></div><p style="font-weight:800;margin:10px 0 4px">Actions:</p><div class="bank" id="mChips"></div>`;
+  renderMatch(q);
+}
+function renderMatch(q){
+  const rows=$("mRows"), chips=$("mChips"); rows.innerHTML=""; chips.innerHTML="";
+  q.items.forEach((it,i)=>{
+    const r=document.createElement("div"); r.className="mrow";
+    const w=document.createElement("div"); w.className="who"; w.textContent=it.who;
+    const s=document.createElement("button"); s.className="mslot";
+    const v=S.match.assign[i];
+    if(v!==null){ s.classList.add("filled"); s.textContent=q.items[v].act; } else s.textContent="Tap an action…";
+    if(S.answered){ s.disabled=true; s.classList.add(v===i?"right":"wrong"); }
+    s.addEventListener("click",()=>{
+      if(S.answered) return;
+      if(S.match.sel!==null){
+        const c=S.match.sel; S.match.assign=S.match.assign.map(x=>x===c?null:x);
+        S.match.assign[i]=c; S.match.sel=null;
+      } else if(S.match.assign[i]!==null){ S.match.assign[i]=null; }
+      renderMatch(q);
+    });
+    r.appendChild(w); r.appendChild(s); rows.appendChild(r);
+  });
+  S.match.chips.forEach(c=>{
+    if(S.match.assign.includes(c)) return;
+    const b=document.createElement("button"); b.className="tok"+(S.match.sel===c?" sel":""); b.textContent=q.items[c].act;
+    b.addEventListener("click",()=>{ if(S.answered)return; S.match.sel=(S.match.sel===c?null:c); renderMatch(q); });
+    chips.appendChild(b);
+  });
+  $("btnCheck").style.display=""; $("btnCheck").disabled = S.match.assign.includes(null) || S.answered;
+}
+
+/* ---------- check button (order & match) ---------- */
+function checkAnswer(){
+  if(S.answered) return;
+  const q=LEVELS[S.cur].qs[S.qi];
+  let ok=false;
+  if(q.type==="order"){
+    ok = S.order.ans.map(t=>t.w).join(" ")===q.answer;
+    renderOrder(q);
+  } else if(q.type==="match"){
+    ok = S.match.assign.every((v,i)=>v===i);
+  }
+  finishQuestion(ok,false,$("btnCheck"));
+}
+
+/* ---------- finishing a question ---------- */
+const GOOD=["Amazing! 🌟","Great Job! 🎉","Fantastic! ✨","Super! 💖","Brilliant! 💎"];
+function finishQuestion(ok, timedOut, srcEl){
+  if(S.answered) return;
+  S.answered=true; stopTimer();
+  const q=LEVELS[S.cur].qs[S.qi];
+  if(ok){ S.score+=10; S.correct++; } else { S.hearts=Math.max(0,S.hearts-1); }
+  // reveal answers for order/match
+  if(q.type==="order"){ renderOrder(q); $("btnCheck").style.display="none"; }
+  if(q.type==="match"){ if(!ok) S.match.assign=q.items.map((_,i)=>i); renderMatch(q); $("btnCheck").style.display="none";
+    if(!ok){ /* show correct mapping neutrally */ document.querySelectorAll(".mslot").forEach(s=>{s.classList.remove("wrong");s.classList.add("right");}); } }
+  $("btnCheck").style.display="none";
+  $("btnHint").disabled=true;
+  const fb=$("feedback"); fb.className="feedback on "+(ok?"ok":"no");
+  $("fbTitle").textContent = ok ? GOOD[Math.floor(Math.random()*GOOD.length)] : (timedOut ? "⏰ Time's up! Oops! Try Again!" : "Oops! Try Again! 💪");
+  $("fbText").textContent = (ok ? "" : "Don't worry, mistakes help us learn! ") + q.exp;
+  if(!ok){
+    let ansTxt = q.type==="mc" ? q.opts[q.a] : q.type==="order" ? q.answer+q.end : q.items.map(i=>i.who+" "+i.act).join(" • ");
+    $("fbAns").textContent="✔ Correct answer: "+ansTxt;
+  } else $("fbAns").textContent="";
+  const last = S.qi>=9;
+  $("btnNext").textContent = S.hearts<=0 ? "Continue ➜" : (last ? "Finish Level 🏁" : "Next ➜");
+  if(ok){ sndOk(); const r=(srcEl||fb).getBoundingClientRect(); burst(r.left+r.width/2, r.top+r.height/2); }
+  else sndNo();
+  updateHUD();
+  setTimeout(()=>fb.scrollIntoView({behavior:"smooth",block:"nearest"}),80);
+}
+function nextStep(){
+  if(!S.answered) return;
+  if(S.hearts<=0){ stopTimer(); $("modal").classList.remove("hidden"); return; }
+  if(S.qi>=9){ completeLevel(); return; }
+  S.qi++; renderQuestion();
+}
+
+/* ---------- hint ---------- */
+function showHint(){
+  if(S.answered) return;
+  const q=LEVELS[S.cur].qs[S.qi];
+  const h=$("hintbox"); h.textContent="💡 "+q.hint; h.className="hintbox on";
+}
+
+/* ---------- timer (level 3 only) ---------- */
+function startTimer(){
+  stopTimer();
+  S.timeLeft=TIME_LIMIT; drawTimer();
+  S.timerId=setInterval(()=>{
+    if(S.answered){ stopTimer(); return; }
+    S.timeLeft--; drawTimer();
+    if(S.timeLeft<=0){ stopTimer(); document.querySelectorAll("#optBox .opt").forEach(x=>{x.disabled=true; if(x.dataset.val===LEVELS[S.cur].qs[S.qi].opts[LEVELS[S.cur].qs[S.qi].a]) x.classList.add("right");}); finishQuestion(false,true,$("feedback")); }
+  },1000);
+}
+function stopTimer(){ if(S.timerId){ clearInterval(S.timerId); S.timerId=null; } }
+function drawTimer(){
+  $("timerNum").textContent=Math.max(0,S.timeLeft)+"s";
+  $("timerFill").style.width=Math.max(0,S.timeLeft)/TIME_LIMIT*100+"%";
+  $("timerRow").classList.toggle("low",S.timeLeft<=5);
+}
+
+/* ---------- level complete ---------- */
+function completeLevel(){
+  stopTimer();
+  S.levelDone[S.cur]=true; S.levelScore[S.cur]=S.score; S.levelCorrect[S.cur]=S.correct;
+  const L=LEVELS[S.cur];
+  $("resTitle").textContent=L.short+" Complete!";
+  $("resShard").innerHTML=crystalSVG(110,L.shard);
+  $("resShardText").textContent="💎 You earned Crystal Shard #"+(S.cur+1)+"!";
+  $("resScore").textContent=S.score; $("resCorrect").textContent=S.correct;
+  $("btnContinue").textContent = S.cur<2 ? "Continue to Level "+(S.cur+2)+" ➜" : "Restore the Time Crystal ✨";
+  showScreen("result"); sndWin(); burstCenter(36);
+  setTimeout(()=>burstCenter(24),500);
+}
+function continueFlow(){
+  if(S.cur<2) startLevel(S.cur+1); else showVictory();
+}
+function showVictory(){
+  const total=S.levelScore.reduce((a,b)=>a+b,0), cor=S.levelCorrect.reduce((a,b)=>a+b,0);
+  $("vScore").textContent=total; $("vCorrect").textContent=cor;
+  $("victoryCrystal").innerHTML=crystalSVG(150,"full");
+  showScreen("victory"); sndWin(); burstCenter(50); setTimeout(()=>burstCenter(40),600);
+}
+function resetGame(){
+  stopTimer();
+  S.levelDone=[false,false,false]; S.levelScore=[0,0,0]; S.levelCorrect=[0,0,0];
+  S.cur=0; S.qi=0; S.hearts=3; S.score=0; S.correct=0; S.answered=false;
+  goMap();
+}
+
+/* ===================== EVENTS ===================== */
+$("startCrystal").innerHTML=crystalSVG(130,"full");
+$("btnStart").onclick=()=>{ tone([[523,.1],[784,.15]]); goMap(); };
+$("btnHow").onclick=()=>openInfo("how");
+$("btnRevStart").onclick=()=>openInfo("review");
+$("btnRevMap").onclick=()=>openInfo("review");
+$("btnRevVic").onclick=()=>openInfo("review");
+document.querySelectorAll("[data-back]").forEach(b=>b.onclick=()=>{ if(S.prev==="map") goMap(); else if(S.prev==="victory") showScreen("victory"); else showScreen("start"); });
+$("btnHome").onclick=()=>showScreen("start");
+$("btnToMap").onclick=()=>goMap();
+$("btnHint").onclick=showHint;
+$("btnCheck").onclick=checkAnswer;
+$("btnNext").onclick=nextStep;
+$("btnContinue").onclick=continueFlow;
+$("btnResMap").onclick=goMap;
+$("btnAgain").onclick=resetGame;
+$("btnRetry").onclick=()=>startLevel(S.cur);
+$("btnModalMap").onclick=goMap;
+$("soundBtn").onclick=()=>{ S.sound=!S.sound; $("soundBtn").textContent=S.sound?"🔊":"🔇"; if(S.sound) tone([[660,.1]]); };
+
+buildSparkles(); setTheme("t-start");
+</script>
+</body>
+</html>
